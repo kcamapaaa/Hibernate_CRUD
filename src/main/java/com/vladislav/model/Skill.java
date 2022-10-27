@@ -50,6 +50,7 @@ public class Skill {
         this.developers = developers;
     }
 
+
     @Override
     public String toString() {
         return "Skill{" +
@@ -57,4 +58,5 @@ public class Skill {
                 ", name='" + name + '\'' +
                 '}';
     }
+
 }

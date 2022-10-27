@@ -16,8 +16,8 @@ public class Developer {
     private String lastName;
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "skills_developers",
-        joinColumns = {@JoinColumn(name = "developers_id")},
-        inverseJoinColumns = {@JoinColumn(name = "skills_id")})
+        joinColumns = {@JoinColumn(name = "developer_id")},
+        inverseJoinColumns = {@JoinColumn(name = "skill_id")})
     private List<Skill> skills;
     @ManyToOne(fetch = FetchType.EAGER)
     private Specialty specialty;

@@ -46,7 +46,9 @@ public class HiberDeveloperRepository implements DeveloperRepository {
     public Developer save(Developer developer) {
         try (Session session = HiberUtils.getSessionFactory().openSession()) {
             session.beginTransaction();
+
             session.save(developer);
+
             session.getTransaction().commit();
         } catch (Throwable e) {
             throw new RuntimeException(e);
@@ -58,6 +60,7 @@ public class HiberDeveloperRepository implements DeveloperRepository {
     public Developer update(Developer developer) {
         try (Session session = HiberUtils.getSessionFactory().openSession()) {
             session.beginTransaction();
+
             Developer updatedDeveloper = session.find(Developer.class, developer.getId());
             if (updatedDeveloper == null || updatedDeveloper.getStatus() == Status.DELETED) {
                 return null;
@@ -65,7 +68,10 @@ public class HiberDeveloperRepository implements DeveloperRepository {
             updatedDeveloper.setFirstName(developer.getFirstName());
             updatedDeveloper.setLastName(developer.getLastName());
             session.update(updatedDeveloper);
+
             session.getTransaction().commit();
+        } catch (Throwable e) {
+            throw new RuntimeException(e);
         }
         return developer;
     }
@@ -74,13 +80,17 @@ public class HiberDeveloperRepository implements DeveloperRepository {
     public boolean deleteById(Integer id) {
         try (Session session = HiberUtils.getSessionFactory().openSession()) {
             session.beginTransaction();
+
             Developer deletedDeveloper = session.find(Developer.class, id);
             if (deletedDeveloper == null || deletedDeveloper.getStatus() == Status.DELETED) {
                 return false;
             }
             deletedDeveloper.setStatus(Status.DELETED);
             session.update(deletedDeveloper);
+
             session.getTransaction().commit();
+        } catch (Throwable e) {
+            throw new RuntimeException(e);
         }
         return true;
     }
