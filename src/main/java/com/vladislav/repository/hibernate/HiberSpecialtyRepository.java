@@ -15,7 +15,7 @@ public class HiberSpecialtyRepository implements SpecialtyRepository {
     @Override
     public Specialty getById(Integer id) {
         Specialty specialty;
-        try (Session session = HiberUtils.getSessionFactory().openSession()) {
+        try (Session session = HiberUtils.getSession()) {
             session.beginTransaction();
             specialty = session.get(Specialty.class, id);
             session.getTransaction().commit();
@@ -28,18 +28,9 @@ public class HiberSpecialtyRepository implements SpecialtyRepository {
     @Override
     public List<Specialty> getAll() {
         List<Specialty> specialtyList;
-        try (Session session = HiberUtils.getSessionFactory().openSession()) {
-            session.beginTransaction();
-
-            CriteriaBuilder cb = session.getCriteriaBuilder();
-            CriteriaQuery<Specialty> cq = cb.createQuery(Specialty.class);
-            Root<Specialty> root = cq.from(Specialty.class);
-            cq.select(root);
-
-            Query<Specialty> query = session.createQuery(cq);
+        try (Session session = HiberUtils.getSession()) {
+            Query<Specialty> query = session.createQuery("FROM Specialty");
             specialtyList = query.getResultList();
-
-            session.getTransaction().commit();
         } catch (Throwable e) {
             throw new RuntimeException(e);
         }
@@ -48,12 +39,10 @@ public class HiberSpecialtyRepository implements SpecialtyRepository {
 
     @Override
     public Specialty save(Specialty specialty) {
-        try (Session session = HiberUtils.getSessionFactory().openSession()) {
+        try (Session session = HiberUtils.getSession()) {
             session.beginTransaction();
-
             Integer id = (Integer) session.save(specialty);
             specialty.setId(id);
-
             session.getTransaction().commit();
         } catch (Throwable e) {
             throw new RuntimeException(e);
@@ -63,7 +52,7 @@ public class HiberSpecialtyRepository implements SpecialtyRepository {
 
     @Override
     public Specialty update(Specialty specialty) {
-        try (Session session = HiberUtils.getSessionFactory().openSession()) {
+        try (Session session = HiberUtils.getSession()) {
             session.beginTransaction();
             Specialty needUpdate = session.get(Specialty.class, specialty.getId());
             if (needUpdate == null) {
@@ -80,7 +69,7 @@ public class HiberSpecialtyRepository implements SpecialtyRepository {
 
     @Override
     public boolean deleteById(Integer id) {
-        try (Session session = HiberUtils.getSessionFactory().openSession()) {
+        try (Session session = HiberUtils.getSession()) {
             session.beginTransaction();
             Specialty needToDelete = session.get(Specialty.class, id);
             if (needToDelete == null) {

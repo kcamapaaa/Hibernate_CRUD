@@ -7,19 +7,18 @@ import java.util.List;
 @Table(name = "developers")
 public class Developer {
     @Id
-    @SequenceGenerator(name = "developer_seq", sequenceName = "developer_seq_id", allocationSize = 1)
-    @GeneratedValue(generator = "developer_seq", strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     @Column(name = "first_name")
     private String firstName;
     @Column(name = "last_name")
     private String lastName;
-    @ManyToMany(fetch = FetchType.EAGER)
+    @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "skills_developers",
         joinColumns = {@JoinColumn(name = "developer_id")},
         inverseJoinColumns = {@JoinColumn(name = "skill_id")})
     private List<Skill> skills;
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne
     private Specialty specialty;
     @Enumerated(EnumType.STRING)
     @Column(name = "status")

@@ -7,8 +7,7 @@ import java.util.List;
 @Table(name = "skills")
 public class Skill {
     @Id
-    @SequenceGenerator(name = "skill_seq", sequenceName = "skill_id_seq", allocationSize = 1)
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "skill_seq")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     private String name;
     @ManyToMany(mappedBy = "skills")

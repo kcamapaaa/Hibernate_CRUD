@@ -8,8 +8,7 @@ import java.util.Objects;
 @Table(name = "specialties")
 public class Specialty {
     @Id
-    @SequenceGenerator(name = "specialty_seq", sequenceName = "specialty_id_seq", allocationSize = 1)
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "specialty_seq")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     private String name;
     @OneToMany(mappedBy = "specialty")

@@ -14,10 +14,8 @@ public class HiberSkillRepository implements com.vladislav.repository.SkillRepos
     @Override
     public Skill getById(Integer id) {
         Skill skill;
-        try(Session session = HiberUtils.getSessionFactory().openSession()) {
-            session.beginTransaction();
+        try(Session session = HiberUtils.getSession()) {
             skill = session.get(Skill.class, id);
-            session.getTransaction().commit();
         } catch (Throwable e) {
             throw new RuntimeException(e);
         }
@@ -27,18 +25,9 @@ public class HiberSkillRepository implements com.vladislav.repository.SkillRepos
     @Override
     public List<Skill> getAll() {
         List<Skill> skillsList;
-        try(Session session = HiberUtils.getSessionFactory().openSession()) {
-            session.beginTransaction();
-
-            CriteriaBuilder cb = session.getCriteriaBuilder();
-            CriteriaQuery<Skill> cq = cb.createQuery(Skill.class);
-            Root<Skill> root = cq.from(Skill.class);
-            cq.select(root);
-
-            Query<Skill> query = session.createQuery(cq);
+        try(Session session = HiberUtils.getSession()) {
+            Query<Skill> query = session.createQuery("FROM Skill");
             skillsList = query.getResultList();
-
-            session.getTransaction().commit();
         } catch (Throwable e) {
             throw new RuntimeException(e);
         }
@@ -47,12 +36,10 @@ public class HiberSkillRepository implements com.vladislav.repository.SkillRepos
 
     @Override
     public Skill save(Skill skill) {
-        try(Session session = HiberUtils.getSessionFactory().openSession()) {
+        try(Session session = HiberUtils.getSession()) {
             session.beginTransaction();
-
             Integer id = (Integer) session.save(skill);
             skill.setId(id);
-
             session.getTransaction().commit();
         } catch (Throwable e) {
             throw new RuntimeException(e);
@@ -62,7 +49,7 @@ public class HiberSkillRepository implements com.vladislav.repository.SkillRepos
 
     @Override
     public Skill update(Skill skill) {
-        try(Session session = HiberUtils.getSessionFactory().openSession()) {
+        try(Session session = HiberUtils.getSession()) {
             session.beginTransaction();
             Skill updatedSkill = session.get(Skill.class, skill.getId());
             if(updatedSkill == null) {
@@ -79,7 +66,7 @@ public class HiberSkillRepository implements com.vladislav.repository.SkillRepos
 
     @Override
     public boolean deleteById(Integer id) {
-        try(Session session = HiberUtils.getSessionFactory().openSession()) {
+        try(Session session = HiberUtils.getSession()) {
             session.beginTransaction();
             Skill deletedSkill = session.get(Skill.class, id);
             if(deletedSkill == null) {

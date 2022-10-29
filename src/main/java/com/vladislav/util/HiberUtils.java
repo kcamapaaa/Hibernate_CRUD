@@ -26,8 +26,12 @@ public class HiberUtils {
         }
     }
 
-    public static SessionFactory getSessionFactory() {
+    private static SessionFactory getSessionFactory() {
         return sessionFactory;
+    }
+
+    public static Session getSession() {
+        return getSessionFactory().openSession();
     }
 
 }
